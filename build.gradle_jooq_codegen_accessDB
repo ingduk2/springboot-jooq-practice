@@ -1,0 +1,81 @@
+import nu.studer.gradle.jooq.JooqEdition // gradle jooq codegen add
+
+plugins {
+	id 'org.springframework.boot' version '2.6.2'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'nu.studer.jooq' version '6.0.1' // gradle jooq codegen add
+}
+
+group = 'com.hello'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-jooq'
+
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'mysql:mysql-connector-java'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	jooqGenerator 'mysql:mysql-connector-java:8.0.27' // gradle jooq codegen add
+}
+
+test {
+	useJUnitPlatform()
+}
+
+// gradle jooq codegen add
+jooq {
+	// use jOOQ version defined in Spring Boot
+	version = dependencyManagement.importedProperties['jooq.version']
+	edition = JooqEdition.OSS
+
+	configurations {
+		main {
+			generationTool {
+				logging = org.jooq.meta.jaxb.Logging.WARN
+				jdbc {
+					driver = 'com.mysql.cj.jdbc.Driver'
+					url = 'jdbc:mysql://localhost:3306/library?serverTimezone=UTC&characterEncoding=UTF-8'
+					user = 'root'
+					password = 'qwer1234'
+					properties {
+						property {
+							key = 'PAGE_SIZE'
+							value = 2048
+						}
+					}
+				}
+				generator {
+					name = 'org.jooq.codegen.DefaultGenerator'
+					database {
+						name = 'org.jooq.meta.mysql.MySQLDatabase'
+						inputSchema = 'library' //없으면 모든 테이블 다가져옴
+						includes = '.*'
+						excludes = ''
+					}
+					target {
+						packageName = 'com.hello.jooq.jooqgen'
+					}
+					strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
+				}
+			}
+		}
+	}
+}

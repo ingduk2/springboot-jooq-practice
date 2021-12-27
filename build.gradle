@@ -1,0 +1,100 @@
+import nu.studer.gradle.jooq.JooqEdition // gradle jooq codegen add
+
+plugins {
+	id 'org.springframework.boot' version '2.6.2'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'nu.studer.jooq' version '6.0.1' // gradle jooq codegen add
+}
+
+group = 'com.hello'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-jooq'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'mysql:mysql-connector-java'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.2.0'
+
+	testRuntimeOnly 'com.h2database:h2'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+
+//	jooqGenerator 'mysql:mysql-connector-java:8.0.27' // gradle jooq codegen add
+	jooqGenerator 'org.jooq:jooq-meta-extensions:3.14.15'
+}
+
+test {
+	useJUnitPlatform()
+}
+
+// gradle jooq codegen add
+jooq {
+	// use jOOQ version defined in Spring Boot
+	version = dependencyManagement.importedProperties['jooq.version']
+	edition = JooqEdition.OSS
+	configurations {
+		main {
+			generationTool {
+				logging = org.jooq.meta.jaxb.Logging.WARN
+				generator {
+					name = 'org.jooq.codegen.DefaultGenerator'
+					strategy {
+						"org.jooq.codegen.DefaultGeneratorStrategy"
+					}
+					generate {
+						relations = true
+						deprecated = false
+						records = true
+						immutablePojos = true
+						fluentSetters = true
+						daos = false
+						pojosEqualsAndHashCode = true
+						javaTimeTypes = true
+					}
+					database {
+						name = 'org.jooq.meta.extensions.ddl.DDLDatabase'
+						properties {
+							property {
+								key = 'scripts'
+								value = 'src/main/resources/sql/*.sql'
+							}
+							property {
+								key = 'sort'
+								value = 'semantic'
+							}
+							property {
+								key = 'unqualifiedSchema'
+								value = 'none'
+							}
+							property {
+								key = 'defaultNameCase'
+								value = 'lower'
+							}
+						}
+					}
+					target {
+						packageName = 'com.hello.jooq.jooqgen'
+					}
+
+				}
+			}
+		}
+	}
+}
