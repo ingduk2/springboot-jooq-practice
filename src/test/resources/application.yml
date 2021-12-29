@@ -1,6 +1,6 @@
 spring:
   jooq:
-    sql-dialect: h2
+    sql-dialect: mysql
   datasource:
     hikari:
       driver-class-name: org.h2.Driver
@@ -17,4 +17,4 @@ mybatis:
 
 logging:
   level:
-    org.jooq.tools.LoggerListener: info
+    org.jooq.tools.LoggerListener: debug

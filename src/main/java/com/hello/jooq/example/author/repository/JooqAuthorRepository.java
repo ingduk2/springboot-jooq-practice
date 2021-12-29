@@ -1,18 +1,23 @@
 package com.hello.jooq.example.author.repository;
 
 import com.hello.jooq.example.author.dto.AuthorDto;
+import com.hello.jooq.example.author.dto.AuthorEntity;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jooq.BatchBindStep;
 import org.jooq.DSLContext;
 import org.jooq.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.imageio.stream.IIOByteBuffer;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.hello.jooq.jooqgen.tables.Author.*;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class JooqAuthorRepository {
@@ -75,7 +80,9 @@ public class JooqAuthorRepository {
      * 한방 쿼리. mybatis foreach 같이 만들어주는듯
      */
     public void bulkInsertSingle() {
-        BatchBindStep batch = dslContext.batch(dslContext.insertInto(AUTHOR, AUTHOR.FIRST_NAME, AUTHOR.LAST_NAME).values((String) null, null));
+        BatchBindStep batch = dslContext.batch(
+                dslContext.insertInto(AUTHOR, AUTHOR.FIRST_NAME, AUTHOR.LAST_NAME)
+                        .values((String) null, null));
         for (int i = 0; i < 10000; i++) {
             batch.bind("F" + i, "L" + i);
         }
@@ -100,5 +107,48 @@ public class JooqAuthorRepository {
         return dslContext.select()
                 .from(AUTHOR)
                 .fetchInto(AuthorDto.class);
+    }
+
+    public int insertOnDuplicate(AuthorEntity entity) {
+        return dslContext.insertInto(AUTHOR, AUTHOR.ID, AUTHOR.LAST_NAME, AUTHOR.READ_COUNT)
+                .values(entity.getId(), entity.getLastName(), entity.getReadCount())
+                .onDuplicateKeyUpdate()
+                .set(AUTHOR.READ_COUNT, AUTHOR.READ_COUNT.plus(entity.getReadCount()))
+                .execute();
+    }
+
+    public void bulkInsertOnDuplicate(List<AuthorEntity> entities) {
+        BatchBindStep batch = dslContext.batch(
+                dslContext.insertInto(AUTHOR,
+                                AUTHOR.ID, AUTHOR.FIRST_NAME, AUTHOR.LAST_NAME, AUTHOR.READ_COUNT)
+                        .values((Integer) null, null, null, null)
+                        .onDuplicateKeyUpdate()
+                        .set(AUTHOR.READ_COUNT, AUTHOR.READ_COUNT.plus((Number) null))
+        );
+
+
+        entities.forEach(e -> batch.bind(e.batchOnDuplicate()));
+
+        // fail
+        // map으로 하는거는 안되지...?
+//        entities.forEach(e -> {
+//            log.info("e {}", e);
+//            log.info("e.bindMap : {}", e.bindMap(e));
+//            batch.bind(e.bindMap(e));
+//        });
+
+        // success
+//        for (AuthorEntity entity : entities) {
+//            log.info("entity : {}", entity);
+//            batch.bind(entity.getId(), entity.getFirstName(), entity.getLastName(), entity.getReadCount(), entity.getReadCount());
+//        }
+
+        batch.execute();
+    }
+
+    public List<AuthorEntity> selectReturnEntities() {
+        return dslContext.select()
+                .from(AUTHOR)
+                .fetchInto(AuthorEntity.class);
     }
 }

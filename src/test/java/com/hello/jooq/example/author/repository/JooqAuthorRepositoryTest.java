@@ -1,6 +1,7 @@
 package com.hello.jooq.example.author.repository;
 
 import com.hello.jooq.example.author.dto.AuthorDto;
+import com.hello.jooq.example.author.dto.AuthorEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.jooq.DSLContext;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jooq.JooqTest;
 import org.springframework.context.annotation.Import;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.as;
@@ -71,10 +73,51 @@ class JooqAuthorRepositoryTest {
     @Test
     void bulkInsertSingle() {
         jooqAuthorRepository.bulkInsertSingle();
-//        List<AuthorDto> authorDtos = jooqAuthorRepository.selectAll();
-//        log.info("size : {}", authorDtos.size());
     }
 
+    @Test
+    void bulkInsertOnDuplicate() {
+        AuthorEntity entity = AuthorEntity.builder()
+                .id(1)
+                .firstName("first")
+                .lastName("last")
+                .readCount(1)
+                .build();
 
+        List<AuthorEntity> entities = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            entities.add(entity);
+        }
+
+//        for (AuthorEntity authorEntity : entities) {
+//            jooqAuthorRepository.insertOnDuplicate(authorEntity);
+//        }
+
+        jooqAuthorRepository.bulkInsertOnDuplicate(entities);
+
+        List<AuthorEntity> savedEntities = jooqAuthorRepository.selectReturnEntities();
+        log.info("savedEntities : {}", savedEntities);
+        assertThat(savedEntities.size()).isEqualTo(1);
+        assertThat(savedEntities.get(0).getReadCount()).isEqualTo(10);
+    }
+
+    @Test
+    void bulkInsertOnDuplicate2() {
+        List<AuthorEntity> entities = new ArrayList<>();
+        for (int i = 1; i <= 10; i++) {
+            entities.add(AuthorEntity.builder()
+                    .id(i)
+                    .firstName("first")
+                    .lastName("last")
+                    .readCount(i)
+                    .build());
+        }
+
+        jooqAuthorRepository.bulkInsertOnDuplicate(entities);
+
+        List<AuthorEntity> savedEntities = jooqAuthorRepository.selectReturnEntities();
+        log.info("savedEntities : {}", savedEntities);
+        assertThat(savedEntities.size()).isEqualTo(10);
+    }
 
 }
