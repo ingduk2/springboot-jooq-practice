@@ -14,10 +14,20 @@
 
 ##### jooq test
 - h2 memory db yml 추가
-- embedded schema 추가 [https://oingdaddy.tistory.com/264](https://oingdaddy.tistory.com/264)
+- embedded schema 추가
 - test Code를 build시 접속 못 할 수도 있음(jenkins에서 db접속 안될때..)
 
 ##### 주의사항
 - test h2 schema 사용시 schema.sql CREATE IF NOT EXIST 사용.
 - 없으니 테스트 전체 돌릴때 table exist Exception이 남..
 - 다른 설정으로도 가능할듯..?(dirtycontext 인가 찾아봐야함..)
+
+##### reference
+* [ddl codegen](https://stackoverflow.com/questions/70262959/function-not-found-when-generating-code-with-ddl-database-jooq)
+* [gradle jooq plugin](https://github.com/etiennestuder/gradle-jooq-plugin)
+* [gradle db codegen](https://oops4u.tistory.com/2577)
+* [springboot-jooq codegen](https://ellune.tistory.com/56)
+* [jooq](https://www.jooq.org/doc/3.14/manual/)
+* [jooq-spring](https://zepinos.tistory.com/55?category=810346)
+* [jooq-spring](https://sightstudio.tistory.com/54)
+* [jooq-with-spring](https://www.baeldung.com/jooq-with-spring)
