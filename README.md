@@ -22,6 +22,13 @@
 - 없으니 테스트 전체 돌릴때 table exist Exception이 남..
 - 다른 설정으로도 가능할듯..?(dirtycontext 인가 찾아봐야함..)
 
+##### 설정
+1. application.yml jooq sqldialect 추가
+2. build.gradle 추가
+3. resources/sql파일 추가
+4. gradle task - jooq - generateJooq
+5. build 폴더에 스키마 생성되었는지 확인
+
 ##### reference
 * [ddl codegen](https://stackoverflow.com/questions/70262959/function-not-found-when-generating-code-with-ddl-database-jooq)
 * [gradle jooq plugin](https://github.com/etiennestuder/gradle-jooq-plugin)
