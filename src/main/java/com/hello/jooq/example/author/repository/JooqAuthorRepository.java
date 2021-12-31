@@ -9,10 +9,7 @@ import org.jooq.DSLContext;
 import org.jooq.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.imageio.stream.IIOByteBuffer;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.hello.jooq.jooqgen.tables.Author.*;
@@ -126,8 +123,7 @@ public class JooqAuthorRepository {
                         .set(AUTHOR.READ_COUNT, AUTHOR.READ_COUNT.plus((Number) null))
         );
 
-
-        entities.forEach(e -> batch.bind(e.batchOnDuplicate()));
+        entities.forEach(e -> batch.bind(e.getBulkUpsertBatchParams()));
 
         // fail
         // map으로 하는거는 안되지...?
@@ -146,9 +142,32 @@ public class JooqAuthorRepository {
         batch.execute();
     }
 
+    public void bulkInsertOnDuplicateStreamParam(List<AuthorEntity> entities) {
+        Query query = dslContext.insertInto(AUTHOR,
+                        AUTHOR.ID,
+                        AUTHOR.FIRST_NAME,
+                        AUTHOR.LAST_NAME,
+                        AUTHOR.READ_COUNT)
+                .values((Integer) null,
+                        null,
+                        null,
+                        null)
+                .onDuplicateKeyUpdate()
+                .set(AUTHOR.READ_COUNT, AUTHOR.READ_COUNT.plus((Number) null));
+
+        BatchBindStep batch = dslContext
+                .batch(query)
+                .bind(entities.stream()
+                        .map(AuthorEntity::getBulkUpsertBatchParams)
+                        .toArray(Object[][]::new));
+
+        batch.execute();
+    }
+
     public List<AuthorEntity> selectReturnEntities() {
         return dslContext.select()
                 .from(AUTHOR)
                 .fetchInto(AuthorEntity.class);
     }
+
 }

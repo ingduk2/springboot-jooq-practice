@@ -3,7 +3,6 @@ package com.hello.jooq.example.author.repository;
 import com.hello.jooq.example.author.dto.AuthorDto;
 import com.hello.jooq.example.author.dto.AuthorEntity;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.jooq.DSLContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +12,7 @@ import org.springframework.context.annotation.Import;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @JooqTest // 이거 config 어디로 되는지 확인 필요
@@ -89,10 +86,6 @@ class JooqAuthorRepositoryTest {
             entities.add(entity);
         }
 
-//        for (AuthorEntity authorEntity : entities) {
-//            jooqAuthorRepository.insertOnDuplicate(authorEntity);
-//        }
-
         jooqAuthorRepository.bulkInsertOnDuplicate(entities);
 
         List<AuthorEntity> savedEntities = jooqAuthorRepository.selectReturnEntities();
@@ -115,6 +108,23 @@ class JooqAuthorRepositoryTest {
 
         jooqAuthorRepository.bulkInsertOnDuplicate(entities);
 
+        List<AuthorEntity> savedEntities = jooqAuthorRepository.selectReturnEntities();
+        log.info("savedEntities : {}", savedEntities);
+        assertThat(savedEntities.size()).isEqualTo(10);
+    }
+
+    @Test
+    void bulkInsertStream() {
+        List<AuthorEntity> entities = new ArrayList<>();
+        for (int i = 1; i <= 10; i++) {
+            entities.add(AuthorEntity.builder()
+                    .id(i)
+                    .firstName("first")
+                    .lastName("last")
+                    .readCount(i)
+                    .build());
+        }
+        jooqAuthorRepository.bulkInsertOnDuplicateStreamParam(entities);
         List<AuthorEntity> savedEntities = jooqAuthorRepository.selectReturnEntities();
         log.info("savedEntities : {}", savedEntities);
         assertThat(savedEntities.size()).isEqualTo(10);

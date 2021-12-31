@@ -17,4 +17,5 @@ mybatis:
 
 logging:
   level:
+#    root: debug
     org.jooq.tools.LoggerListener: debug

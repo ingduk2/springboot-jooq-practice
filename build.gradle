@@ -52,7 +52,7 @@ jooq {
 	configurations {
 		main {
 			generationTool {
-				logging = org.jooq.meta.jaxb.Logging.WARN
+//				logging = org.jooq.meta.jaxb.Logging.WARN
 				generator {
 					name = 'org.jooq.codegen.DefaultGenerator'
 					strategy {
@@ -64,7 +64,7 @@ jooq {
 						records = true
 						immutablePojos = true
 						fluentSetters = true
-						daos = false
+						daos = true
 						pojosEqualsAndHashCode = true
 						javaTimeTypes = true
 					}
