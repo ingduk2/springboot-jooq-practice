@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hello.jooq.mybatis.mapper.AuthorMapper">
+    <insert id="bulkInsertAuthor" >
+        INSERT INTO AUTHOR(FIRST_NAME, LAST_NAME)
+        VALUES
+        <foreach collection="authorVOs" item="vo" separator=",">
+            (
+            #{vo.firstName},
+            #{vo.lastName}
+            )
+        </foreach>
+    </insert>
+</mapper>
