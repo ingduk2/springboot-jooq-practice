@@ -28,8 +28,8 @@ class JooqArticleRepositoryTest {
 
     private AuthorDto getAuthorDto(String firstName, String lastName) {
         return AuthorDto.builder()
-                .firstName("aa")
-                .lastName("bb")
+                .firstName(firstName)
+                .lastName(lastName)
                 .build();
     }
 
@@ -55,7 +55,7 @@ class JooqArticleRepositoryTest {
         //given
         //author Save
         AuthorDto authorDto = authorRepository
-                .insertVALUES_RETURNING(getAuthorDto("aa", "bb"));
+                .insertVALUES_RETURNING(getAuthorDto("aaa", "bb"));
 
         //article Save
         ArticleEntity savedArticle = articleRepository
@@ -107,10 +107,10 @@ class JooqArticleRepositoryTest {
 
         //article Save NoId
         int savedArticleId = articleRepository
-                .insertNewRecordNoId(getArticleNoId("title1", "desc1", authorDto.getId()));
+                .insertNewRecordNoId(getArticleNoId("title1", "description1", authorDto.getId()));
         log.info("savedArticleId : {}", savedArticleId);
         int savedArticleId2 = articleRepository
-                .insertNewRecordNoId(getArticleNoId("title1", "desc1", authorDto.getId()));
+                .insertNewRecordNoId(getArticleNoId("title1", "description1", authorDto.getId()));
         log.info("savedArticleId2 : {}", savedArticleId2);
 
         //when
@@ -158,10 +158,7 @@ class JooqArticleRepositoryTest {
         //given
         //author Save
         AuthorDto authorDto = authorRepository
-                .insertVALUES_RETURNING(AuthorDto.builder()
-                        .firstName("aaa")
-                        .lastName("bbb")
-                        .build());
+                .insertVALUES_RETURNING(getAuthorDto("first", "last"));
 
         //article Save
         for (int i = 1; i <= 3; i++) {
