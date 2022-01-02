@@ -33,6 +33,33 @@
 * jooq 3.14.15
 * jooq-meta-extentions 3.14.15
 
+## jooq my example
+- 직접 짜본 필요한 예제들..(코드가 개판이라 ㅜㅜ)
+- jooq repository
+  - insert(returning), select, batch, insertOnduplicate 
+    - [AuthorRepository](https://github.com/ingduk2/springboot-jooq-practice/blob/master/src/main/java/com/hello/jooq/example/author/repository/JooqAuthorRepository.java)
+  - insert(returning, store), dynamicquery(join) 
+    - [ArticleRepository](https://github.com/ingduk2/springboot-jooq-practice/blob/master/src/main/java/com/hello/jooq/example/author/repository/JooqArticleRepository.java)
+- jooq unitTest
+  - [AuthorTest](https://github.com/ingduk2/springboot-jooq-practice/blob/master/src/test/java/com/hello/jooq/example/author/repository/JooqArticleRepositoryTest.java)
+  - [ArticleTest](https://github.com/ingduk2/springboot-jooq-practice/blob/master/src/test/java/com/hello/jooq/example/author/repository/JooqArticleRepositoryTest.java)  
+
+## jooq official example
+- 문서가 잘되어있어서 검색하면 예제 나옴
+- insert, insertreturning
+  - [jooq official insert](https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/insert-statement/)
+  - [jooq official insertreturning](https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/insert-statement/insert-returning/)
+- select, join, dynamicquery
+  - [jooq official select](https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/select-statement/)
+  - [jooq official join](https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/select-statement/join-clause/)
+  - [jooq official dynamicquery](https://www.jooq.org/doc/latest/manual/sql-building/dynamic-sql/)
+  - [jooq blog dynamicquery with function](https://blog.jooq.org/a-functional-programming-approach-to-dynamic-sql-with-jooq/)
+- batch insert, batch insertOnDuplicate
+  - [jooq official batch](https://www.jooq.org/doc/3.15/manual/sql-execution/batch-execution/)
+  - [jooq official insertOnDuplicate](https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/insert-statement/insert-on-duplicate-key/)
+- Loading POJOs back into Records to store them(store)
+  - [jooq official store](https://www.jooq.org/doc/latest/manual/sql-execution/fetching/pojos/#N8D4F1)
+  - 
 ## setting
 ##### jooq codegen
 - gradle third party 사용해야 잘됨.
@@ -54,34 +81,7 @@
 - embedded schema 추가
 - test Code를 build시 접속 못 할 수도 있음(jenkins에서 db접속 안될때..)
   - [test/resource](https://github.com/ingduk2/springboot-jooq-practice/tree/master/src/test/resources)
-- junit jooqTest (repository Import 필요)
-  - [junit jooqTest1](https://github.com/ingduk2/springboot-jooq-practice/blob/master/src/test/java/com/hello/jooq/example/author/repository/JooqAuthorRepositoryTest.java)
-  - [junit jooqTest2](https://github.com/ingduk2/springboot-jooq-practice/blob/master/src/test/java/com/hello/jooq/example/author/repository/JooqArticleRepositoryTest.java)
-
-##### jooq My example
-- 직접 짜본 필요한 예제들..(코드가 개판이라 ㅜㅜ)
-- jooq repository
-  - [AuthorRepository]()
-  - [ArticleRepository]()
-- jooq unitTest
-  - [AuthorTest]()
-  - [ArticleTest]()  
-
-##### jooq official example
-- 문서가 잘되어있어서 검색하면 예제 나옴
-- insert, insertreturning
-  - [jooq official insert](https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/insert-statement/)
-  - [jooq official insertreturning](https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/insert-statement/insert-returning/)
-- select, join, dynamicquery
-  - [jooq official select](https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/select-statement/)
-  - [jooq official join](https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/select-statement/join-clause/)
-  - [jooq official dynamicquery](https://www.jooq.org/doc/latest/manual/sql-building/dynamic-sql/)
-  - [jooq blog dynamicquery with function](https://blog.jooq.org/a-functional-programming-approach-to-dynamic-sql-with-jooq/)
-- batch insert, batch insertOnDuplicate
-  - [jooq official batch](https://www.jooq.org/doc/3.15/manual/sql-execution/batch-execution/)
-  - [jooq official insertOnDuplicate](https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/insert-statement/insert-on-duplicate-key/)
-- Loading POJOs back into Records to store them(store)
-  - [jooq official store](https://www.jooq.org/doc/latest/manual/sql-execution/fetching/pojos/#N8D4F1)
+- junit jooqTest (repository Import 필요 Autowired 사용할려면)
 
 ##### 주의사항
 - test h2 schema 사용시 schema.sql CREATE IF NOT EXIST 사용.
