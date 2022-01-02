@@ -23,7 +23,7 @@
 |무료 DBMS(opensource)에서 무료|모든 DBMS 무료|
 |연관관계 없이 조인 가능|hibernate5.1부터 연관관계 없이 조인 지원|
 |subquery(추가조사필요..)|subquery(추가조사필요..)|
-|query와 비슷|jpa 이해 필요(어렵다)|
+|query와 비슷|jpa 이해 필요(제대로 쓰기 어렵다)|
 
 ## environment
 * intellij
@@ -59,7 +59,7 @@
   - [jooq official insertOnDuplicate](https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/insert-statement/insert-on-duplicate-key/)
 - Loading POJOs back into Records to store them(store)
   - [jooq official store](https://www.jooq.org/doc/latest/manual/sql-execution/fetching/pojos/#N8D4F1)
-  - 
+  
 ## setting
 ##### jooq codegen
 - gradle third party 사용해야 잘됨.
