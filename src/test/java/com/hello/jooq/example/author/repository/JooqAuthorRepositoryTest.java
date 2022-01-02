@@ -4,6 +4,7 @@ import com.hello.jooq.example.author.dto.AuthorDto;
 import com.hello.jooq.example.author.dto.AuthorEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jooq.JooqTest;
@@ -16,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @JooqTest // 이거 config 어디로 되는지 확인 필요
-@Import(JooqAuthorRepository.class)
+@Import(JooqAuthorRepository.class) //Repository 는 따로 import 필요. for autowired
 class JooqAuthorRepositoryTest {
 
     @Autowired
@@ -48,11 +49,13 @@ class JooqAuthorRepositoryTest {
     }
 
     @Test
+    @DisplayName("for loop insert 10000 수행시간 H2 memory (1.465 sec)")
     void insert10000() {
         AuthorDto dto = AuthorDto.builder()
                 .firstName("first")
                 .lastName("last")
                 .build();
+
         int insertCount = 0;
 
         for (int i = 0; i < 10000; i++) {
@@ -63,27 +66,30 @@ class JooqAuthorRepositoryTest {
     }
 
     @Test
-    void bulkInsert10000() {
-        jooqAuthorRepository.bulkInsert();
+    @DisplayName("bulkInsert Multiple 10000 수행시간 H2 memory (880ms ~ 1sec)")
+    void bulkInsertMultiple10000() {
+        int resultCount = jooqAuthorRepository.bulkInsert();
+        assertThat(resultCount).isEqualTo(10000);
     }
 
     @Test
+    @DisplayName("bulkInsert Single 10000 수행시간 H2 memory (800ms ~ 900ms)")
     void bulkInsertSingle() {
-        jooqAuthorRepository.bulkInsertSingle();
+        int resultCount = jooqAuthorRepository.bulkInsertSingle();
+        assertThat(resultCount).isEqualTo(10000);
     }
 
     @Test
+    @DisplayName("같은 값을 insertOnDuplicate 해서 update 되는지 확인")
     void bulkInsertOnDuplicate() {
-        AuthorEntity entity = AuthorEntity.builder()
-                .id(1)
-                .firstName("first")
-                .lastName("last")
-                .readCount(1)
-                .build();
-
         List<AuthorEntity> entities = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            entities.add(entity);
+            entities.add(AuthorEntity.builder()
+                    .id(1)
+                    .firstName("first")
+                    .lastName("last")
+                    .readCount(1)
+                    .build());
         }
 
         jooqAuthorRepository.bulkInsertOnDuplicate(entities);
@@ -95,6 +101,7 @@ class JooqAuthorRepositoryTest {
     }
 
     @Test
+    @DisplayName("다른 값을 insertOnDuplicate 해서 각각 insert 되는지 확인")
     void bulkInsertOnDuplicate2() {
         List<AuthorEntity> entities = new ArrayList<>();
         for (int i = 1; i <= 10; i++) {

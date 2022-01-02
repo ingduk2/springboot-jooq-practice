@@ -9,14 +9,13 @@ import java.util.Arrays;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ArticleEntity {
 
-    private int id;
+    private Integer id;
     private String title;
     private String description;
     private int authorId;
 
     @Builder
-    public ArticleEntity(int id, String title, String description, int authorId) {
-        this.id = id;
+    public ArticleEntity(String title, String description, int authorId) {
         this.title = title;
         this.description = description;
         this.authorId = authorId;

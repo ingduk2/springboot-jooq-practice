@@ -7,14 +7,14 @@ import java.util.Arrays;
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ArticleEntityNoId {
+public class ArticleDtoNoId {
 
     private String title;
     private String description;
     private int authorId;
 
     @Builder
-    public ArticleEntityNoId(String title, String description, int authorId) {
+    public ArticleDtoNoId(String title, String description, int authorId) {
         this.title = title;
         this.description = description;
         this.authorId = authorId;
