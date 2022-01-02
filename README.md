@@ -6,13 +6,21 @@
 * jooq 를 찾아보게 되었고 조금씩 적용중 입니다.
 * querydsl 도 querydsl(sql) 을 지원 합니다.
 
-#### DSL (Domain Specific Language)
-* SQL 은 Type Scheck 가 불가능, 실행하기 전까지 모름
+#### sql (string, xml) 단점
+* Type check 가 불가능, 실행하기 전까지 모름
+* 실행 전 오류를 알기 어렵다.
+
+## DSL (Domain Specific Language)
 #### DSL 장점
 * 동적 쿼리 지원
 * java 코드로 작성하기 때문에 컴파일 시에 문법 오류 발견 가능
 * Type Safe 지원
 * 오타로 인한 오류를 줄일 수 있음
+* 자동완성 지원
+* 문법적으로 잘못된 쿼리를 일부 방지 할 수 있음
+  * [참조 : jooq BNF 표기법](https://zepinos.tistory.com/58?category=810346)
+  * [참조 : querydsl fluent api](http://querydsl.com/static/querydsl/4.1.3/reference/html_single/#preface)
+
 #### DSL 단점
 * codegen 파일생성(Q파일) 이라고 생각.(꼬이면 한없이 안됨..)
 * 익숙하지 않다.
@@ -22,8 +30,16 @@
 |----|--------|
 |무료 DBMS(opensource)에서 무료|모든 DBMS 무료|
 |연관관계 없이 조인 가능|hibernate5.1부터 연관관계 없이 조인 지원|
-|subquery(추가조사필요..)|subquery(추가조사필요..)|
-|query와 비슷|jpa 이해 필요(제대로 쓰기 어렵다)|
+|subquery 다 가능한듯|where, select subquery 가능, from절 지원 안함|
+|query와 비슷|jpa,객체지향 이해 필요(영속성 컨텍스트, 연관관계, n + 1 문제 등.. 제대로 쓰기 어렵다)|   
+* reference
+  * [jooq Scalar subqueries](https://www.jooq.org/doc/3.11/manual/sql-building/column-expressions/scalar-subqueries/) 
+  * [jooq Derived tables](https://www.jooq.org/doc/3.11/manual/sql-building/table-expressions/derived-tables/)
+  * [about jooq](https://zepinos.tistory.com/54?category=810346)
+  * [querydsl subquery](https://jojoldu.tistory.com/379)
+  * [querydsl join](https://dev-alxndr.tistory.com/32)
+  * [sub query select join](https://velog.io/@gwontaeyong/JOOQ-%EC%84%A4%EC%A0%95) 
+  * [querydsl from, join절에 서브쿼리 사용하기](https://programmingnote.tistory.com/85)
 
 ## environment
 * intellij
