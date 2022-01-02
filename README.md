@@ -5,7 +5,7 @@
 - 3.xml Schema (복잡..) 
 - 4.From Jpa (JPA와 같이 사용하는 경우에 좋을듯)
 ###### reference
-- [jooq codegen](https://kwonnam.pe.kr/wiki/gradle/jooq_codegen)
+- [jooq codegen 종류](https://kwonnam.pe.kr/wiki/gradle/jooq_codegen)
 
 ##### jooq build codegen
 - ./gradlew generateJooq
